@@ -5,7 +5,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 
 
-
 fun getIdUserLogged(): Long? {
     val authentication = SecurityContextHolder.getContext().authentication
 
