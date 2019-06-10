@@ -23,10 +23,6 @@ data class Customer (
         @Column
         val password: String,
 
-        @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-        @JoinColumn
-        val document: MutableList<Document> = ArrayList(),
-
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn
         val image: File

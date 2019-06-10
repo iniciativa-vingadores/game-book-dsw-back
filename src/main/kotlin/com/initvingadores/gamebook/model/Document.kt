@@ -38,15 +38,12 @@ data class Document (
         @JoinColumn
         val keyWords: MutableList<Tag> = ArrayList(),
 
-        @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-        @JoinColumn
-        val flows: MutableList<Flow> = ArrayList(),
-
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn
         val start: Flow,
 
         @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+        @JoinColumn
         val owner: Customer,
 
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
