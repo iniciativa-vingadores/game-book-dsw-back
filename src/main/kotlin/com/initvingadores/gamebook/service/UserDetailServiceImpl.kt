@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service
 class UserDetailServiceImpl : UserDetailsService {
 
     override fun loadUserByUsername(p0: String?): UserDetails {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO() // Recupera usuario do bd pra saber se esta logado ou n
     }
 }
