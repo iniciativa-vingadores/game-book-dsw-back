@@ -25,5 +25,5 @@ data class Customer (
 
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn
-        val image: File
+        val image: File?
 )

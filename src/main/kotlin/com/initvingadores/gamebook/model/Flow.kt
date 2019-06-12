@@ -15,9 +15,9 @@ data class Flow (
 
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn
-        val decision1: Flow,
+        val decision1: Flow?,
 
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn
-        val decision2: Flow
+        val decision2: Flow?
 )
