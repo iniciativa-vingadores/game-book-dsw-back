@@ -8,13 +8,13 @@ import kotlin.math.min
 
 data class CreateCustomerDTO (
         val id: Long = 0L,
-        @NotNull
+        @NotNull(message = "Nome não pode ser nulo")
         @NotBlank(message = "Campo obrigatório")
         val name: String,
-        @NotNull
+        @NotNull(message = "Email não pode ser nulo")
         @NotBlank(message = "Campo obrigatório")
         val email: String,
-        @NotNull
+        @NotNull(message = "Senha não pode ser nula")
         @NotBlank(message = "Campo obrigatório")
         @Size(min = 6, max = 15, message = "Senha deve ter tamanho entre 6 e 15 e conter caracteres e números")
         val password: String,

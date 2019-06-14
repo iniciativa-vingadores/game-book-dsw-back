@@ -13,6 +13,10 @@ data class Flow (
         @Column(nullable = false)
         val story: String,
 
+        @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+        @JoinColumn
+        val document: Document?,
+
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn
         val decision1: Flow?,

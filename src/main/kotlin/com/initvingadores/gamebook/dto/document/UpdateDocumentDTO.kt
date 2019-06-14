@@ -6,7 +6,7 @@ import com.initvingadores.gamebook.model.Genre
 import javax.validation.constraints.NotNull
 
 data class UpdateDocumentDTO (
-        @NotNull
+        @NotNull(message = "Id não pode ser nulo")
         val id: Long,
         val title: String?,
         val overview: String?,

@@ -2,15 +2,11 @@ package com.initvingadores.gamebook.dto.flow
 
 import com.initvingadores.gamebook.model.Document
 import com.initvingadores.gamebook.model.Flow
-import javax.validation.constraints.NotNull
 
-data class UpdateFlowDTO (
-        @NotNull(message = "Id não pode ser nulo")
+data class DetailFlowDTO (
         val id: Long,
-
-        val story: String?,
-
+        val story: String,
+        val document: Document,
         val decision1: Flow?,
-
         val decision2: Flow?
 )

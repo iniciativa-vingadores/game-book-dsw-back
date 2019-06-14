@@ -10,22 +10,19 @@ import javax.validation.constraints.NotNull
 data class CreateDocumentDTO(
         val id: Long = 0L,
 
-        @NotNull
+        @NotNull(message = "Título não pode ser nulo")
         @NotBlank(message = "Campo obrigatório")
         val title: String,
 
-        @NotNull
+        @NotNull(message = "Resumo não pode ser nulo")
         @NotBlank(message = "Campo obrigatório")
         val overview: String,
 
-        @NotNull
+        @NotNull(message = "Informe pelo menos um gênero")
         @NotBlank(message = "Campo obrigatório")
         val genres: MutableList<Genre>,
 
         val keyWords: Tag,
 
-        val image: File?,
-
-        @NotNull(message = "É necessário informar o fluxo inicial da história.")
-        val flow: Flow
+        val image: File?
 )
