@@ -21,13 +21,3 @@ fun getEmailUserLogged(): String? {
     } else (authentication.principal as UserSpringSecurity).username
 }
 
-fun getAuthorities(role: String): Boolean {
-    val authentication = SecurityContextHolder.getContext().authentication
-
-    return if (authentication == null || authentication.principal == "anonymousUser") {
-        false
-    } else (authentication.principal as UserSpringSecurity)
-            .authorities
-            .contains(SimpleGrantedAuthority(role))
-}
-

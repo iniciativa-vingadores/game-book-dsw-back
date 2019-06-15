@@ -11,18 +11,16 @@ import java.util.Date
 
 @Component
 class JWTUtils {
-    @Value("\${jwt.secret}")
-    private val secret: String? = null
+    private val secret: String = "zaq1xsw2cde"
 
-
-    @Value("\${jwt.expiration_time}")
-    private val expiration: Long? = null
+    //Uma semana
+    private val expiration: Long = 604800000
 
     fun generateToken(email: String): String {
         return Jwts.builder()
                 .setSubject(email)
-                .setExpiration(Date(System.currentTimeMillis() + expiration!!))
-                .signWith(SignatureAlgorithm.HS512, secret!!.toByteArray())
+                .setExpiration(Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS512, secret.toByteArray())
                 .compact()
     }
 
@@ -43,7 +41,7 @@ class JWTUtils {
     private fun getClaims(token: String): Claims? {
         return try {
             Jwts.parser()
-                    .setSigningKey(secret!!.toByteArray())
+                    .setSigningKey(secret.toByteArray())
                     .parseClaimsJws(token)
                     .body
         } catch (e: Exception) {

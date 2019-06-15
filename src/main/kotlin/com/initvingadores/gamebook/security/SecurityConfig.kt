@@ -34,7 +34,7 @@ class SecurityConfig: WebSecurityConfigurerAdapter() {
                 ?.antMatchers("/**")?.permitAll()
                 ?.and()?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ?.and()?.addFilter(JWTAuthenticationFilter(authenticationManager(), jwtUtils))
-                ?.addFilter(JWTAuthorizationFilter(authenticationManager(), jwtUtils))
+                ?.addFilter(JWTAuthorizationFilter(authenticationManager(), userDetailService, jwtUtils))
 
     }
 

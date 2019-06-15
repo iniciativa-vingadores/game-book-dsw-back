@@ -1,5 +1,6 @@
 package com.initvingadores.gamebook.dto.customer
 
+import com.initvingadores.gamebook.model.Customer
 import com.initvingadores.gamebook.model.File
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -16,7 +17,15 @@ data class CreateCustomerDTO (
         val email: String,
         @NotNull(message = "Senha não pode ser nula")
         @NotBlank(message = "Campo obrigatório")
-        @Size(min = 6, max = 15, message = "Senha deve ter tamanho entre 6 e 15 e conter caracteres e números")
+        @Size(min = 6, max = 15, message = "Senha deve ter tamanho entre 6 e 15 caracteres.")
         val password: String,
         val image: File?
 )
+
+fun CreateCustomerDTO.toCustomer(password: String): Customer =
+        Customer(
+                id = id,
+                name = name,
+                email = email,
+                password = password,
+                image = image)

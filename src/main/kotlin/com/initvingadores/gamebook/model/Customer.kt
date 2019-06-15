@@ -1,5 +1,6 @@
 package com.initvingadores.gamebook.model
 
+import com.initvingadores.gamebook.dto.customer.DetailCustomerDTO
 import javax.persistence.*
 
 @Entity
@@ -17,7 +18,7 @@ data class Customer (
         @Column(length = 300)
         val name: String,
 
-        @Column
+        @Column(unique = true)
         val email: String,
 
         @Column
@@ -27,3 +28,6 @@ data class Customer (
         @JoinColumn
         val image: File?
 )
+
+fun Customer.toDetailCustomerDTO() : DetailCustomerDTO =
+        DetailCustomerDTO(id, name, email, situation, image)
