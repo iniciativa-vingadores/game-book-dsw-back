@@ -1,5 +1,6 @@
 package com.initvingadores.gamebook.model
 
+import com.initvingadores.gamebook.dto.genre.DetailGenreDTO
 import javax.persistence.*
 
 @Entity
@@ -13,3 +14,6 @@ data class Genre (
         @Column(nullable = false, length = 100)
         val name: String
 )
+
+fun Genre.toDetailGenreDTO () : DetailGenreDTO =
+        DetailGenreDTO(id, name)

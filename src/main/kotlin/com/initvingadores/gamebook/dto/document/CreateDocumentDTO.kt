@@ -1,9 +1,6 @@
 package com.initvingadores.gamebook.dto.document
 
-import com.initvingadores.gamebook.model.File
-import com.initvingadores.gamebook.model.Flow
-import com.initvingadores.gamebook.model.Genre
-import com.initvingadores.gamebook.model.Tag
+import com.initvingadores.gamebook.model.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
@@ -20,9 +17,21 @@ data class CreateDocumentDTO(
 
         @NotNull(message = "Informe pelo menos um gênero")
         @NotBlank(message = "Campo obrigatório")
-        val genres: MutableList<Genre>,
+        val genres: List<Genre>,
 
-        val keyWords: Tag,
+        val keyWords: List<Tag> = ArrayList(0),
 
         val image: File?
 )
+
+fun CreateDocumentDTO.toDocument(owner: Customer, flow: Flow? = null) : Document =
+        Document(
+                id,
+                title = title,
+                overview = overview,
+                genre = genres,
+                keyWords = keyWords,
+                image = image,
+                owner = owner,
+                start = flow,
+                rate = 0.0)

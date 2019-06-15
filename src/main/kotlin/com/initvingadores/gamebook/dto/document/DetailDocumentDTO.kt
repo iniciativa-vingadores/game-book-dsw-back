@@ -13,6 +13,6 @@ data class DetailDocumentDTO (
         val genres: List<Genre>,
         val keywords: List<Tag>,
         val owner: Customer,
-        val start: Flow,
+        val start: Flow?,
         val image: File?
 )

@@ -64,7 +64,7 @@ class CustomerServiceImpl : CustomerService {
     }
 
 
-    private fun getCustomerById(idCustomer: Long): Customer {
+    fun getCustomerById(idCustomer: Long): Customer {
         val idCustomerLogged = getIdUserLogged()
                 ?: throw AuthenticationException("Usuário não está autenticado.")
 

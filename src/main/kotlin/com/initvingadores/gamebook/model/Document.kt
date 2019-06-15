@@ -1,5 +1,6 @@
 package com.initvingadores.gamebook.model
 
+import com.initvingadores.gamebook.dto.document.DetailDocumentDTO
 import java.util.*
 import javax.persistence.*
 import kotlin.collections.ArrayList
@@ -32,15 +33,15 @@ data class Document (
 
         @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
         @JoinColumn
-        val genre: MutableList<Genre> = ArrayList(),
+        val genre: List<Genre> = ArrayList(),
 
         @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
         @JoinColumn
-        val keyWords: MutableList<Tag> = ArrayList(),
+        val keyWords: List<Tag> = ArrayList(),
 
         @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
         @JoinColumn
-        val start: Flow,
+        val start: Flow?,
 
         @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
         @JoinColumn
@@ -50,3 +51,18 @@ data class Document (
         @JoinColumn
         val image: File?
 )
+
+fun Document.toDetailDocumentDTO(): DetailDocumentDTO =
+        DetailDocumentDTO(
+                id,
+                date,
+                situation,
+                title,
+                overview,
+                rate,
+                genre,
+                keyWords,
+                owner,
+                start,
+                image
+        )
