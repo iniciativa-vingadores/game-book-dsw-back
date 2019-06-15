@@ -5,6 +5,7 @@ import com.initvingadores.gamebook.dto.customer.DetailCustomerDTO
 import com.initvingadores.gamebook.dto.customer.UpdateCustomerDTO
 import com.initvingadores.gamebook.dto.customer.toCustomer
 import com.initvingadores.gamebook.model.Customer
+import com.initvingadores.gamebook.model.Situation
 import com.initvingadores.gamebook.model.toDetailCustomerDTO
 import com.initvingadores.gamebook.repository.CustomerRepository
 import com.initvingadores.gamebook.system.exception.*
@@ -41,7 +42,9 @@ class CustomerServiceImpl : CustomerService {
         val customer = customerDTO.toCustomer(
                 customerDTO.name ?: customerDB.name,
                 customerDTO.email ?: customerDB.email,
-                bCryptPasswordEncoder.encode(customerDTO.password) ?: customerDB.password)
+                customerDTO.password?.let {
+                    bCryptPasswordEncoder.encode(it)
+                } ?: customerDB.password)
 
         return customerRepository.save(customer).toDetailCustomerDTO()
     }
@@ -49,7 +52,15 @@ class CustomerServiceImpl : CustomerService {
     override fun delete(idCustomer: Long) {
         val customerDB = getCustomerById(idCustomer)
 
-        customerRepository.delete(customerDB)
+        val deletedCustomer = Customer(
+                customerDB.id,
+                Situation.INACTIVE,
+                customerDB.name,
+                customerDB.email,
+                customerDB.password,
+                customerDB.image)
+
+        customerRepository.save(deletedCustomer)
     }
 
 
