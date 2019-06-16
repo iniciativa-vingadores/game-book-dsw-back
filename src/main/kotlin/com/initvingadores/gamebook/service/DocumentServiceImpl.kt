@@ -6,6 +6,7 @@ import com.initvingadores.gamebook.dto.document.UpdateDocumentDTO
 import com.initvingadores.gamebook.dto.document.toDocument
 import com.initvingadores.gamebook.model.Document
 import com.initvingadores.gamebook.model.Genre
+import com.initvingadores.gamebook.model.Situation
 import com.initvingadores.gamebook.model.toDetailDocumentDTO
 import com.initvingadores.gamebook.repository.DocumentRepository
 import com.initvingadores.gamebook.repository.TagRepository
@@ -31,7 +32,9 @@ class DocumentServiceImpl : DocumentService {
 
     override fun save(documentDTO: CreateDocumentDTO): DetailDocumentDTO {
         if (documentDTO.keyWords.isNotEmpty()) {
-            tagRepository.saveAll(documentDTO.keyWords)
+            documentDTO.keyWords.forEach {
+                tagRepository.findByName(it.name) ?: tagRepository.save(it)
+            }
         }
 
         checkGenres(documentDTO.genres)
@@ -51,11 +54,38 @@ class DocumentServiceImpl : DocumentService {
             getDocumentById(idDocument).toDetailDocumentDTO()
 
     override fun update(documentDTO: UpdateDocumentDTO): DetailDocumentDTO {
-        TODO("not implemented")
+        val documentDB = getDocumentById(documentDTO.id)
+
+        val document = documentDTO.toDocument(
+                documentDTO.id,
+                documentDTO.title ?: documentDB.title,
+                documentDTO.overview ?: documentDB.overview,
+                documentDTO.genres ?: documentDB.genre,
+                documentDB.rate,
+                documentDTO.image ?: documentDB.image,
+                documentDB.owner,
+                documentDTO.flow ?: documentDB.start)
+
+        return documentRepository.save(document).toDetailDocumentDTO()
     }
 
     override fun delete(idDocument: Long) {
-        TODO("not implemented")
+        val documentDB = getDocumentById(idDocument)
+
+        val deletedDocument = Document(
+                documentDB.id,
+                documentDB.date,
+                Situation.INACTIVE,
+                documentDB.title,
+                documentDB.overview,
+                documentDB.rate,
+                documentDB.genre,
+                documentDB.keyWords,
+                documentDB.start,
+                documentDB.owner,
+                documentDB.image)
+
+        documentRepository.save(deletedDocument)
     }
 
     private fun checkGenres(genres: List<Genre>) {

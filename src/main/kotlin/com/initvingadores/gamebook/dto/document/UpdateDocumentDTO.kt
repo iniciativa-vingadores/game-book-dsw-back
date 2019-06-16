@@ -1,8 +1,7 @@
 package com.initvingadores.gamebook.dto.document
 
-import com.initvingadores.gamebook.model.File
-import com.initvingadores.gamebook.model.Flow
-import com.initvingadores.gamebook.model.Genre
+import com.initvingadores.gamebook.model.*
+import java.awt.datatransfer.ClipboardOwner
 import javax.validation.constraints.NotNull
 
 data class UpdateDocumentDTO (
@@ -10,7 +9,26 @@ data class UpdateDocumentDTO (
         val id: Long,
         val title: String?,
         val overview: String?,
-        val genres: MutableList<Genre>?,
+        val genres: List<Genre>?,
         val image: File?,
         val flow: Flow?
 )
+
+fun UpdateDocumentDTO.toDocument(
+        id: Long,
+        title: String,
+        overview: String,
+        genres: List<Genre>,
+        rate: Double,
+        image: File?,
+        owner: Customer,
+        flow: Flow?) : Document =
+        Document(
+                id = id,
+                title = title,
+                overview = overview,
+                genre = genres,
+                image = image,
+                rate = rate,
+                start = flow,
+                owner = owner)
