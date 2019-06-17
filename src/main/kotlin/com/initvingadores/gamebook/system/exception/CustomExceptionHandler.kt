@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.lang.RuntimeException
 import java.util.*
+import javax.validation.ConstraintViolationException
 
 class DataException(override val message: String?) : RuntimeException(message)
 
@@ -56,5 +57,16 @@ class CustomExceptionHandler {
                 exception.message)
 
         return ResponseEntity(error, HttpStatus.UNAUTHORIZED)
+    }
+
+    @ExceptionHandler
+    fun handlerException(exception: ConstraintViolationException)
+            : ResponseEntity<CustomError> {
+        val error = CustomError(
+                HttpStatus.BAD_REQUEST.value(),
+                Date(System.currentTimeMillis()),
+                exception.message)
+
+        return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
 }
