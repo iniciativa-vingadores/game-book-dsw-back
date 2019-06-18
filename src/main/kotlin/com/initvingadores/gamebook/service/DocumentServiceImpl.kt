@@ -4,15 +4,13 @@ import com.initvingadores.gamebook.dto.document.CreateDocumentDTO
 import com.initvingadores.gamebook.dto.document.DetailDocumentDTO
 import com.initvingadores.gamebook.dto.document.UpdateDocumentDTO
 import com.initvingadores.gamebook.dto.document.toDocument
-import com.initvingadores.gamebook.model.Document
-import com.initvingadores.gamebook.model.Genre
-import com.initvingadores.gamebook.model.Situation
-import com.initvingadores.gamebook.model.toDetailDocumentDTO
+import com.initvingadores.gamebook.model.*
 import com.initvingadores.gamebook.repository.DocumentRepository
 import com.initvingadores.gamebook.repository.TagRepository
 import com.initvingadores.gamebook.system.exception.NotFoundException
 import com.initvingadores.gamebook.system.getIdUserLogged
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,13 +18,10 @@ class DocumentServiceImpl : DocumentService {
 
     @Autowired
     lateinit var documentRepository: DocumentRepository
-
     @Autowired
     lateinit var customerService: CustomerServiceImpl
-
     @Autowired
     lateinit var tagRepository: TagRepository
-
     @Autowired
     lateinit var genreService: GenreService
 
@@ -46,8 +41,38 @@ class DocumentServiceImpl : DocumentService {
                 )).toDetailDocumentDTO()
     }
 
-    override fun list(size: Int, page: Long, query: String?): List<DetailDocumentDTO> {
-        TODO("not implemented")
+    override fun list(size: Int, page: Int, title: String?,
+                      rate: Double?, genre: List<String>?, keywords: List<String>?, owner: Customer?)
+            : List<DetailDocumentDTO> {
+        val currentPage = documentRepository.findAll(PageRequest.of(page, size))
+
+        var filteredList : List<Document> = currentPage.content
+        genre?.let { genres ->
+            genres.forEach { value ->
+                filteredList = filteredList.filter { document ->
+                    document.genre.any { it.name == value}
+                }
+            }
+        }
+
+        keywords?.let { keys ->
+            keys.forEach { key ->
+                filteredList = filteredList.filter { document ->
+                    document.keyWords.any { it.name == key}
+                }
+            }
+        }
+
+
+        return filteredList
+                .filter {document ->
+                    document.situation == Situation.ACTIVE
+                            && title?.let{ document.title == it } ?: true
+                            && rate?.let{ document.rate == it } ?: true
+                            && owner?.let{ document.owner.id == it.id } ?: true
+                }
+                .map { it.toDetailDocumentDTO() }
+                .sortedBy { it.date }
     }
 
     override fun detail(idDocument: Long): DetailDocumentDTO =

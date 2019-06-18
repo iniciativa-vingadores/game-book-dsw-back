@@ -20,10 +20,10 @@ class GenreController {
     @GetMapping
     fun listGenres (
             @RequestParam(required = false, defaultValue = "20") size: Int,
-            @RequestParam(required = false, defaultValue = "0") page: Long,
-            @RequestParam(required = false) query: String?
+            @RequestParam(required = false, defaultValue = "0") page: Int,
+            @RequestParam(required = false) name: String?
     ) : ResponseEntity<List<DetailGenreDTO>> {
 
-        return ResponseEntity(genreService.list(size, page, query), HttpStatus.OK)
+        return ResponseEntity(genreService.list(size, page, name), HttpStatus.OK)
     }
 }

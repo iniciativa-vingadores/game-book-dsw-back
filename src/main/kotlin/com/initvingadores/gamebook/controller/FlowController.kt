@@ -34,11 +34,10 @@ class FlowController {
     fun listFlow(
             @PathVariable idDocument: Long,
             @RequestParam(required = false, defaultValue = "20") size: Int,
-            @RequestParam(required = false, defaultValue = "0") page: Long,
-            @RequestParam(required = false) query: String?
+            @RequestParam(required = false, defaultValue = "0") page: Int
     ) : ResponseEntity<List<DetailFlowDTO>> {
 
-        return ResponseEntity(flowService.list(idDocument, size, page, query),
+        return ResponseEntity(flowService.list(idDocument, size, page),
                 HttpStatus.OK)
     }
 

@@ -17,7 +17,7 @@ class FlowServiceImpl : FlowService {
         TODO("not implemented")
     }
 
-    override fun list(idDocument: Long, size: Int, page: Long, query: String?): List<DetailFlowDTO> {
+    override fun list(idDocument: Long, size: Int, page: Int): List<DetailFlowDTO> {
         TODO("not implemented")
     }
 

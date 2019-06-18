@@ -3,12 +3,14 @@ package com.initvingadores.gamebook.service
 import com.initvingadores.gamebook.dto.document.CreateDocumentDTO
 import com.initvingadores.gamebook.dto.document.DetailDocumentDTO
 import com.initvingadores.gamebook.dto.document.UpdateDocumentDTO
+import com.initvingadores.gamebook.model.Customer
 
 interface DocumentService {
 
     fun save(documentDTO: CreateDocumentDTO): DetailDocumentDTO
 
-    fun list(size: Int, page: Long, query: String?): List<DetailDocumentDTO>
+    fun list(size: Int, page: Int, title: String?, rate: Double?,
+             genre: List<String>?, keywords: List<String>?, owner: Customer?): List<DetailDocumentDTO>
 
     fun detail(idDocument: Long): DetailDocumentDTO
 

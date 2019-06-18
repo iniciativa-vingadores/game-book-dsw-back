@@ -3,6 +3,7 @@ package com.initvingadores.gamebook.controller
 import com.initvingadores.gamebook.dto.document.CreateDocumentDTO
 import com.initvingadores.gamebook.dto.document.DetailDocumentDTO
 import com.initvingadores.gamebook.dto.document.UpdateDocumentDTO
+import com.initvingadores.gamebook.model.Customer
 import com.initvingadores.gamebook.service.DocumentService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -31,11 +32,16 @@ class DocumentController {
     @GetMapping
     fun listDocument(
             @RequestParam(required = false, defaultValue = "20") size: Int,
-            @RequestParam(required = false, defaultValue = "0") page: Long,
-            @RequestParam(required = false) query: String?
+            @RequestParam(required = false, defaultValue = "0") page: Int,
+            @RequestParam(required = false) title: String?,
+            @RequestParam(required = false) rate: Double?,
+            @RequestParam(required = false) genre: List<String>?,
+            @RequestParam(required = false) keywords: List<String>?,
+            @RequestParam(required = false) owner: Customer?
     ) : ResponseEntity<List<DetailDocumentDTO>> {
 
-        return ResponseEntity(documentService.list(size, page, query), HttpStatus.OK)
+        return ResponseEntity(documentService
+                .list(size, page, title, rate, genre, keywords, owner), HttpStatus.OK)
     }
 
     @GetMapping("/{idDocument}")
