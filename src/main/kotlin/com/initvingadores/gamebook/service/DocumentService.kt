@@ -4,6 +4,7 @@ import com.initvingadores.gamebook.dto.document.CreateDocumentDTO
 import com.initvingadores.gamebook.dto.document.DetailDocumentDTO
 import com.initvingadores.gamebook.dto.document.UpdateDocumentDTO
 import com.initvingadores.gamebook.model.Customer
+import com.initvingadores.gamebook.model.Document
 
 interface DocumentService {
 
@@ -17,4 +18,6 @@ interface DocumentService {
     fun update(documentDTO: UpdateDocumentDTO): DetailDocumentDTO
 
     fun delete(idDocument: Long)
+
+    fun getDocumentById(idDocument: Long) : Document
 }

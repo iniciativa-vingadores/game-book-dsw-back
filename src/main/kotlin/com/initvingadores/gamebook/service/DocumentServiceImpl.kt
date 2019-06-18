@@ -10,7 +10,6 @@ import com.initvingadores.gamebook.repository.TagRepository
 import com.initvingadores.gamebook.system.exception.NotFoundException
 import com.initvingadores.gamebook.system.getIdUserLogged
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,7 +18,7 @@ class DocumentServiceImpl : DocumentService {
     @Autowired
     lateinit var documentRepository: DocumentRepository
     @Autowired
-    lateinit var customerService: CustomerServiceImpl
+    lateinit var customerService: CustomerService
     @Autowired
     lateinit var tagRepository: TagRepository
     @Autowired
@@ -44,9 +43,9 @@ class DocumentServiceImpl : DocumentService {
     override fun list(size: Int, page: Int, title: String?,
                       rate: Double?, genre: List<String>?, keywords: List<String>?, owner: Customer?)
             : List<DetailDocumentDTO> {
-        val currentPage = documentRepository.findAll(PageRequest.of(page, size))
+        val current = documentRepository.findAll()
 
-        var filteredList : List<Document> = currentPage.content
+        var filteredList : List<Document> = current
         genre?.let { genres ->
             genres.forEach { value ->
                 filteredList = filteredList.filter { document ->
@@ -63,16 +62,21 @@ class DocumentServiceImpl : DocumentService {
             }
         }
 
-
-        return filteredList
+        filteredList = filteredList
                 .filter {document ->
                     document.situation == Situation.ACTIVE
                             && title?.let{ document.title == it } ?: true
                             && rate?.let{ document.rate == it } ?: true
                             && owner?.let{ document.owner.id == it.id } ?: true
-                }
-                .map { it.toDetailDocumentDTO() }
-                .sortedBy { it.date }
+                }.sortedBy { it.date }
+
+        val totalPages = (filteredList.size / size)
+        filteredList = when (page) {
+            totalPages -> filteredList.subList(page * size, (page * size) + filteredList.size % size)
+            else -> filteredList.subList(page * size, ((page * size) + (size)))
+        }
+
+        return filteredList.map { it.toDetailDocumentDTO() }
     }
 
     override fun detail(idDocument: Long): DetailDocumentDTO =
@@ -119,7 +123,7 @@ class DocumentServiceImpl : DocumentService {
         }
     }
 
-    private fun getDocumentById (idDocument: Long) : Document {
+    override fun getDocumentById (idDocument: Long) : Document {
         return documentRepository.findById(idDocument)
                 .orElseThrow { throw NotFoundException("História não encontrada.") }
     }

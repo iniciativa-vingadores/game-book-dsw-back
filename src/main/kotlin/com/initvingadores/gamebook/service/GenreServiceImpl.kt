@@ -16,11 +16,19 @@ class GenreServiceImpl : GenreService {
     lateinit var genreRepository: GenreRepository
 
     override fun list(size: Int, page: Int, name: String?): List<DetailGenreDTO> {
-        val currentPage = genreRepository.findAll(PageRequest.of(page, size))
+        val currentPage = genreRepository.findAll()
 
-        return currentPage.content
-                .filter { it.name == name }
-                .map { it.toDetailGenreDTO() }
+        var filteredList = currentPage.filter { document ->
+            name?.let { it == document.name } ?: true
+        }
+
+        val totalPages = (filteredList.size / size)
+        filteredList = when (page) {
+            totalPages -> filteredList.subList(page * size, (page * size) + filteredList.size % size)
+            else -> filteredList.subList(page * size, ((page * size) + (size)))
+        }
+
+        return filteredList.map { it.toDetailGenreDTO() }
     }
 
     override fun detail(idGenre: Long): DetailGenreDTO =
