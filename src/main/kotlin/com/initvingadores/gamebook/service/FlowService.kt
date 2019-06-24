@@ -8,7 +8,7 @@ interface FlowService {
 
     fun save(idDocument: Long, flowDTO: CreateFlowDTO): DetailFlowDTO
 
-    fun list(idDocument: Long, size: Int, page: Long, query: String?): List<DetailFlowDTO>
+    fun list(idDocument: Long, size: Int, page: Int): List<DetailFlowDTO>
 
     fun detail(idDocument: Long, idFlow: Long): DetailFlowDTO
 

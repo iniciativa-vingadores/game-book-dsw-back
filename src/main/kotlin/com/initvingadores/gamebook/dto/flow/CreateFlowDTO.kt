@@ -18,3 +18,11 @@ data class CreateFlowDTO (
 
         val decision2: Flow?
 )
+
+fun CreateFlowDTO.toFlow() : Flow =
+        Flow(
+                id,
+                story,
+                document,
+                decision1,
+                decision2)

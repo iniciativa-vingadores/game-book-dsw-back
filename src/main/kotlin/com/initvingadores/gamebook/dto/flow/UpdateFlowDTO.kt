@@ -14,3 +14,11 @@ data class UpdateFlowDTO (
 
         val decision2: Flow?
 )
+
+fun UpdateFlowDTO.toFlow(story: String, document: Document) : Flow =
+        Flow(
+                id,
+                story,
+                document,
+                decision1,
+                decision2)
