@@ -2,6 +2,8 @@ package com.initvingadores.gamebook.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.gson.GsonBuilder
+import com.initvingadores.gamebook.dto.auth.AuthDTO
 import com.initvingadores.gamebook.model.Customer
 import com.initvingadores.gamebook.system.getEmailUserLogged
 import com.initvingadores.gamebook.util.JWTUtils
@@ -41,7 +43,9 @@ class JWTAuthenticationFilter(
 
         val email = (authResult?.principal as UserSpringSecurity).username
         val token = jwtUtils.generateToken(email)
+        val id = (authResult.principal as UserSpringSecurity).getUserId()
 
+        response?.writer?.write(GsonBuilder().create().toJson(AuthDTO(id, email, token)))
         response?.addHeader("Authorization", token)
         response?.addHeader("access-control-expose-headers", "Authorization")
     }
