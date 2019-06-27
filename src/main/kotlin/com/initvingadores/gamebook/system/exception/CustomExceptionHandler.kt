@@ -2,8 +2,10 @@ package com.initvingadores.gamebook.system.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.lang.RuntimeException
 import java.util.*
 import javax.validation.ConstraintViolationException
@@ -59,8 +61,8 @@ class CustomExceptionHandler {
         return ResponseEntity(error, HttpStatus.UNAUTHORIZED)
     }
 
-    @ExceptionHandler
-    fun handlerException(exception: ConstraintViolationException)
+    @ExceptionHandler(value = [MethodArgumentNotValidException::class])
+    fun handlerException(exception: MethodArgumentNotValidException)
             : ResponseEntity<CustomError> {
         val error = CustomError(
                 HttpStatus.BAD_REQUEST.value(),

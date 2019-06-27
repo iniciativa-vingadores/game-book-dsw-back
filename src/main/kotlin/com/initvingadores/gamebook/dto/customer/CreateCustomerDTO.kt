@@ -6,7 +6,6 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
-import kotlin.math.min
 
 data class CreateCustomerDTO (
         val id: Long = 0L,

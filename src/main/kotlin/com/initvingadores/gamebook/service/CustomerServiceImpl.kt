@@ -10,6 +10,8 @@ import com.initvingadores.gamebook.model.toDetailCustomerDTO
 import com.initvingadores.gamebook.repository.CustomerRepository
 import com.initvingadores.gamebook.system.exception.*
 import com.initvingadores.gamebook.system.getIdUserLogged
+import com.initvingadores.gamebook.util.isValidEmail
+import com.initvingadores.gamebook.util.isValidPassword
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -24,6 +26,7 @@ class CustomerServiceImpl : CustomerService {
     lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
 
     override fun save(customerDTO: CreateCustomerDTO): DetailCustomerDTO {
+        validateFields(customerDTO)
         customerRepository.getByEmail(customerDTO.email)
                 ?: return customerRepository.save(
                         customerDTO.toCustomer(
@@ -38,7 +41,7 @@ class CustomerServiceImpl : CustomerService {
 
     override fun update(customerDTO: UpdateCustomerDTO): DetailCustomerDTO {
         val customerDB = getCustomerById(customerDTO.id)
-
+        validateFields(customerDTO)
         val customer = customerDTO.toCustomer(
                 customerDTO.name ?: customerDB.name,
                 customerDTO.email ?: customerDB.email,
@@ -73,6 +76,44 @@ class CustomerServiceImpl : CustomerService {
         } else {
             return customerRepository.findById(idCustomer)
                     .orElseThrow { throw NotFoundException("Perfil de usuário não encontrado.") }
+        }
+    }
+
+    private fun <T> validateFields (customer: T) {
+        if (customer is CreateCustomerDTO) {
+            if (customer.name.isEmpty() || customer.email.isEmpty() || customer.password.isEmpty()) {
+                throw DataException("Campo obrigatório.")
+            }
+
+            if (!customer.email.isValidEmail()) {
+                throw DataException("Email inválido.")
+            }
+
+            if (!customer.password.isValidPassword()) {
+                throw DataException("Senha deve conter caracteres e números e ter tamanho entre 6 e 15 caracteres.")
+            }
+        } else if (customer is UpdateCustomerDTO) {
+            customer.name?.let {
+                if (it.isEmpty()) {
+                    throw DataException("Campo obrigatório.")
+                }
+            }
+            customer.email?.let {
+                if (it.isEmpty()) {
+                    throw DataException("Campo obrigatório.")
+                }
+                if (!it.isValidEmail()) {
+                    throw DataException("Email inválido.")
+                }
+            }
+            customer.password?.let {
+                if (it.isEmpty()) {
+                    throw DataException("Campo obrigatório.")
+                }
+                if (!it.isValidPassword()) {
+                    throw DataException("Senha deve conter caracteres e números e ter tamanho entre 6 e 15 caracteres.")
+                }
+            }
         }
     }
 
