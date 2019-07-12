@@ -1,8 +1,14 @@
 # Game book - Backend
 
-Parte backend do projeto Game Book Palaform, trabalho final para matéria Desenvolvimento de Software Web. 
-O projeto foi desenvolvido seguindo o padrão REST e utilizando o framework Spring juntamente com o
+Parte backend do projeto Game Book Palaform, trabalho final para matéria Desenvolvimento de Software Web da Universidade Federal de Goias (UFG). O projeto foi desenvolvido seguindo o padrão REST e utilizando o framework Spring juntamente com o
 banco de dados ProstgreSQL.
+
+## Integrantes
+
+- [Hyago Moreira](https://github.com/HyagoHenrique)
+- [Lucas Prates](https://github.com/pratess)
+- [Rhadá Costa](https://github.com/rcosta87)
+- [Valmir Torres](https://github.com/valmirt)
 
 ## Padrão de rotas adotado
 
